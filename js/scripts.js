@@ -6,8 +6,7 @@ function Player(name) {
   this.selections = [];
 }
 
-function Board(coordinates) {
-  this.coordinates = coordinates;
+function Board() {
   this.whoGoesFirst = "";
   this.lastMarkPlaced = "";
 }
@@ -25,23 +24,32 @@ Board.prototype.determineWhoGoesFirst = function(player1, player2) {
   this.announceTurn();
 }
 
+Board.prototype.playerTurn = function(player1, player2) {
+  if(player1.turn === false) {
+    player1.turn = true;
+    player2.turn = false;
+  } else {
+    player2.turn = true;
+    player1.turn = false;
+  }
+}
+
 Board.prototype.announceTurn = function() {
   return console.log(this.whoGoesFirst + " goes first!");
 }
 
 Board.prototype.placeMark = function(player, coordinate) {
-  this.coordinates[coordinate] = player.mark;
   player.selections.push(coordinate);
   this.lastMarkPlaced = coordinate;
   this.checkForWin();
 }
 
-Board.prototype.checkForWin = function(player1, player2) {
+Board.prototype.checkForWin = function(player) {
   // horizontal three of a kind A1 A2 A3 ... C1 C2 C3
   // vertical three of a kind A1 B1 C1 ... A3 B3 C3
   // diagonal one of a kind A1 B2 C3 / C1 B2 A3
-  if (this.checkWinConditions(player1)) {
-    console.log("win!");
+  if (this.checkWinConditions(player)) {
+    console.log(player.name + " you win");
   }
 }
 
@@ -90,19 +98,6 @@ Board.prototype.checkCounter = function(counter) {
   if (counter === 3) return true;
 }
 
-function Coordinate() {
-  this.a1 = false;
-  this.a2 = false;
-  this.a3 = false;
-  this.b1 = false;
-  this.b2 = false;
-  this.b3 = false;
-  this.c1 = false;
-  this.c2 = false;
-  this.c3 = false;
-}
-
 var player1 = new Player("Abel");
 var player2 = new Player("Computer");
-var coordinates = new Coordinate();
-var gameBoard = new Board(coordinates);
+var gameBoard = new Board();

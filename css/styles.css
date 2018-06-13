@@ -1,0 +1,10 @@
+#hiddenMsg {
+  color: #eee;
+  transition: 1s;
+}
+
+#hiddenMsg:hover {
+  transition: 2s;
+  color: red;
+  cursor: pointer;
+}
