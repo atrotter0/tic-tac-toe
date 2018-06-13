@@ -40,12 +40,12 @@ Board.prototype.checkForWin = function(player1, player2) {
   // horizontal three of a kind A1 A2 A3 ... C1 C2 C3
   // vertical three of a kind A1 B1 C1 ... A3 B3 C3
   // diagonal one of a kind A1 B2 C3 / C1 B2 A3
-  if (this.threeOfAKind(player1)) {
+  if (this.checkWinConditions(player1)) {
     console.log("win!");
   }
 }
 
-Board.prototype.threeOfAKind = function(player) {
+Board.prototype.checkWinConditions = function(player) {
   var result = false;
   var counter = 0;
   var horiz1 = ["a1", "a2", "a3"];
@@ -58,20 +58,18 @@ Board.prototype.threeOfAKind = function(player) {
   var diag2 = ["c1", "b2", "a3"];
   var winConditions = [horiz1, horiz2, horiz3, vert1, vert2, vert3, diag1, diag2];
 
-  console.log("Made it here!");
   for(var i = 0; i < winConditions.length; i++) {
     console.log(winConditions[i]);
+    if (counter >= 3) {
+      console.log("Current i: " + i);
+      console.log("Counter: " + counter);
+      return true;
+    } else {
+      counter = 0;
+    }
     for(j = 0; j < winConditions[j].length; j++) {
       console.log(winConditions[i][j]);
-      if (counter >= 3) {
-        console.log("Current j: " + j);
-        console.log("Counter: " + counter);
-        return true;
-      } else {
-        counter = 0;
-      }
       for(k = 0; k < player.selections.length; k++) {
-        console.log(counter);
         if (winConditions[i][j].includes(player.selections[k])) {
           counter++;
         }
