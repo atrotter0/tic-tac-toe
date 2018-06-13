@@ -10,9 +10,24 @@ function Player(name) {
   this.selections = [];
 }
 
+Player.prototype.makeComputerChoice = function(board) {
+  var randomChoice = Math.floor((Math.random() * (board.coordinates.length -1)) + 0);
+  board.removeCoordinate(randomChoice);
+  this.selections.push(board.coordinates[randomChoice]);
+  return board.coordinates[randomChoice];
+}
+
+Player.prototype.makePlayerChoice = function(board, coordinate) {
+  var index = board.coordinates.indexOf(coordinate);
+  board.removeCoordinate(index);
+  this.selections.push(board.coordinates[coordinate]);
+}
+
 function Board() {
+  this.coordinates = ["a1", "a2", "a3", "b1", "b2", "b3", "c1", "c2", "c3"];
   this.whoGoesFirst = "";
   this.lastMarkPlaced = "";
+  this.turn = "";
 }
 
 Board.prototype.determineWhoGoesFirst = function(player1, player2) {
@@ -21,24 +36,32 @@ Board.prototype.determineWhoGoesFirst = function(player1, player2) {
   if (coinFlip === 1) {
     player1.turn = true;
     this.whoGoesFirst = player1.name;
+    this.turn = player1.name;
   } else {
     player2.turn = true;
     this.whoGoesFirst = player2.name;
+    this.turn = player2.name;
   }
 }
 
-Board.prototype.playerTurn = function(player1, player2) {
+Board.prototype.setPlayerTurn = function(player1, player2) {
   if (player1.turn === false) {
     player1.turn = true;
     player2.turn = false;
+    this.turn = player1.name;
   } else {
     player2.turn = true;
     player1.turn = false;
+    this.turn = player2.name;
   }
 }
 
 Board.prototype.announceTurn = function() {
   return this.whoGoesFirst + " goes first!";
+}
+
+Board.prototype.removeCoordinate = function(coordinate) {
+  this.coordinates.splice(coordinate, 1);
 }
 
 Board.prototype.placeMark = function(player, coordinate) {
@@ -101,7 +124,7 @@ Board.prototype.checkCounter = function(counter) {
   if (counter === 3) return true;
 }
 
-function setupGame() {
+function runGame() {
   player1 = new Player($("#name").val());
   player2 = new Player("Computer");
   gameBoard = new Board();
@@ -113,6 +136,7 @@ function setupGame() {
 function startGame() {
   gameBoard.determineWhoGoesFirst(player1, player2);
   displayTurn();
+  runPlayerTurn();
 }
 
 function displayTurn() {
@@ -120,12 +144,29 @@ function displayTurn() {
   $("#gameMsgBox").fadeToggle(1200);
 }
 
+function runPlayerTurn() {
+  if (gameBoard.turn === player2.name) computerChoice();
+}
+
+function computerChoice() {
+  var choice = player2.makeComputerChoice(gameBoard);
+  console.log(choice);
+}
+
+function runPlayerClick(element) {
+  var id = $(element).attr("id");
+  console.log(id);
+}
+
 $(document).ready(function() {
   $("#startButton").click(function() {
     $(this).toggle();
     $("#optionsButton").toggle();
     $("#gameBoard").fadeToggle(800).css("display", "grid");
+    runGame();
+  });
 
-    setupGame();
+  $(".grid-item").click(function() {
+    //runPlayerClick(this);
   });
 });

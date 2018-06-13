@@ -15,6 +15,7 @@
 }
 
 #gameMsgArea {
+  font-size: 20px;
   text-align: center;
   height: 50px;
   border-bottom: 3px solid #000;
