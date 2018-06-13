@@ -20,7 +20,7 @@ A Tic-Tac-Toe game made with JavaScript, jQuery, and Bootstrap.
   * Input: X
   * Output: Player Mark -> X
 1. Program determines who goes first (coin flip).
-  * Input: runCoinFlip()
+  * Input: board.whoGoesFirst()
   * Output: Player {name}'s turn!
 1. Program allows player to place their mark on a coordinate on the board on their turn.
   * Input: board.placeMark(turn)
