@@ -11,10 +11,11 @@ function Player(name) {
 }
 
 Player.prototype.makeComputerChoice = function(board) {
-  var randomChoice = Math.floor((Math.random() * (board.coordinates.length -1)) + 0);
+  var randomChoice = Math.floor((Math.random() * (board.coordinates.length - 1)) + 0);
+  var gameTile = board.coordinates[randomChoice];
   board.removeCoordinate(randomChoice);
   this.selections.push(board.coordinates[randomChoice]);
-  return board.coordinates[randomChoice];
+  return gameTile;
 }
 
 Player.prototype.makePlayerChoice = function(board, coordinate) {
@@ -150,12 +151,16 @@ function runPlayerTurn() {
 
 function computerChoice() {
   var choice = player2.makeComputerChoice(gameBoard);
-  console.log(choice);
+  console.log("Computer chooses: " + choice);
+  gameBoard.setPlayerTurn(player1, player2);
 }
 
-function runPlayerClick(element) {
+function runUserChoice(element) {
   var id = $(element).attr("id");
-  console.log(id);
+  console.log("Player chooses: " + id);
+  player1.makePlayerChoice(gameBoard, id);
+  gameBoard.setPlayerTurn(player1, player2);
+  runPlayerTurn();
 }
 
 $(document).ready(function() {
@@ -167,6 +172,6 @@ $(document).ready(function() {
   });
 
   $(".grid-item").click(function() {
-    //runPlayerClick(this);
+    runUserChoice(this);
   });
 });
