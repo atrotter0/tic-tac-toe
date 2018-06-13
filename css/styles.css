@@ -8,3 +8,49 @@
   color: red;
   cursor: pointer;
 }
+
+#gameMsgBox {
+  display: none;
+  margin-bottom: 30px;
+}
+
+#gameMsgArea {
+  text-align: center;
+  height: 50px;
+  border-bottom: 3px solid #000;
+}
+
+#gameBoard {
+  display: none;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  background-color: #eee;
+}
+
+.grid-item {
+  border: 1px solid #000;
+  height: 250px;
+  max-height: 250px;
+}
+
+/* responsive styles */
+@media screen and (max-width: 992px) {
+  .grid-item {
+    height: 200px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .grid-item {
+    height: 150px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .grid-item {
+    height: 130px;
+  }
+}

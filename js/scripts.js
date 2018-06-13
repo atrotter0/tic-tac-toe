@@ -1,3 +1,7 @@
+var player1 = {};
+var player2 = {};
+var gameBoard = {};
+
 function Player(name) {
   this.name = name;
   this.difficulty = "";
@@ -21,11 +25,10 @@ Board.prototype.determineWhoGoesFirst = function(player1, player2) {
     player2.turn = true;
     this.whoGoesFirst = player2.name;
   }
-  this.announceTurn();
 }
 
 Board.prototype.playerTurn = function(player1, player2) {
-  if(player1.turn === false) {
+  if (player1.turn === false) {
     player1.turn = true;
     player2.turn = false;
   } else {
@@ -35,7 +38,7 @@ Board.prototype.playerTurn = function(player1, player2) {
 }
 
 Board.prototype.announceTurn = function() {
-  return console.log(this.whoGoesFirst + " goes first!");
+  return this.whoGoesFirst + " goes first!";
 }
 
 Board.prototype.placeMark = function(player, coordinate) {
@@ -98,6 +101,31 @@ Board.prototype.checkCounter = function(counter) {
   if (counter === 3) return true;
 }
 
-var player1 = new Player("Abel");
-var player2 = new Player("Computer");
-var gameBoard = new Board();
+function setupGame() {
+  player1 = new Player($("#name").val());
+  player2 = new Player("Computer");
+  gameBoard = new Board();
+  player1.mark = $("input[name=mark]:checked").val();
+  player1.difficulty = $("input[name=difficulty]:checked").val();
+  startGame();
+}
+
+function startGame() {
+  gameBoard.determineWhoGoesFirst(player1, player2);
+  displayTurn();
+}
+
+function displayTurn() {
+  $("#gameMsgArea").text(gameBoard.announceTurn());
+  $("#gameMsgBox").fadeToggle(1200);
+}
+
+$(document).ready(function() {
+  $("#startButton").click(function() {
+    $(this).toggle();
+    $("#optionsButton").toggle();
+    $("#gameBoard").fadeToggle(800).css("display", "grid");
+
+    setupGame();
+  });
+});
