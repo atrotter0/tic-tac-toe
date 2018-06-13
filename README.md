@@ -40,7 +40,7 @@ A Tic-Tac-Toe game made with JavaScript, jQuery, and Bootstrap.
 
 * HTML/CSS
 * JavaScript
-* Bootstrap 3.3.7
+* Bootstrap 4.0.0
 * jQuery 3.3.1
 
 ## Links
