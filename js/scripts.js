@@ -30,7 +30,7 @@ function Board() {
   this.turn = "";
 }
 
-Board.prototype.determineWhoGoesFirst = function(player1, player2) {
+Board.prototype.determineFirstTurn = function(player1, player2) {
   var coinFlip = Math.floor((Math.random() * 2) + 1);
   console.log("Coin Flip: " + coinFlip);
   if (coinFlip === 1) {
@@ -91,10 +91,7 @@ Board.prototype.checkWinConditions = function(player) {
   var winConditions = [horiz1, horiz2, horiz3, vert1, vert2, vert3, diag1, diag2];
 
   for(var i = 0; i < winConditions.length; i++) {
-    console.log(winConditions[i]);
     if (counter >= 3) {
-      console.log("Current i: " + i);
-      console.log("Counter: " + counter);
       return true;
     } else {
       counter = 0;
@@ -122,6 +119,23 @@ Board.prototype.checkCounter = function(counter) {
   if (counter === 3) return true;
 }
 
+function validateOptions() {
+  if (nameSet() && markSet() && difficultySet()) return true;
+}
+
+function nameSet() {
+  const MAX_NAME_LENGTH = 20;
+  if ($("#name").val() !== "" && $("#name").val().length <= MAX_NAME_LENGTH) return true;
+}
+
+function markSet() {
+  if ($("input[name=mark]:checked").length > 0) return true;
+}
+
+function difficultySet() {
+  if ($("input[name=difficulty]:checked").length > 0) return true;
+}
+
 function runGame() {
   player1 = new Player($("#name").val());
   player2 = new Player("Computer");
@@ -133,7 +147,7 @@ function runGame() {
 }
 
 function startGame() {
-  gameBoard.determineWhoGoesFirst(player1, player2);
+  gameBoard.determineFirstTurn(player1, player2);
   displayTurn();
   runPlayerTurn();
 }
@@ -144,21 +158,21 @@ function runPlayerTurn() {
 
 function computerChoice() {
   var choice = player2.makeComputerChoice(gameBoard);
-  runTileAnimation("#" + choice, player2.mark);
-  console.log("Computer chooses: " + choice);
+  setGameTile("#" + choice, player2.mark);
   gameBoard.setPlayerTurn(player1, player2);
+  console.log("Computer chooses: " + choice);
 }
 
 function runUserChoice(element) {
   var id = $(element).attr("id");
-  runTileAnimation("#" + id, player1.mark);
-  console.log("Player chooses: " + id);
+  setGameTile("#" + id, player1.mark);
   player1.makePlayerChoice(gameBoard, id);
   gameBoard.setPlayerTurn(player1, player2);
+  console.log("Player chooses: " + id);
   runPlayerTurn();
 }
 
-function runTileAnimation(id, playerMark) {
+function setGameTile(id, playerMark) {
   $(id).addClass('selected').addClass(playerMark);
 }
 
@@ -169,7 +183,7 @@ function displayTurn() {
 
 $(document).ready(function() {
   $("#startButton").click(function() {
-    $("#jumbo-message").text("Good luck, enjoy the game!");
+    $("#jumbo-message").text("Good luck and enjoy the game!");
     $(this).slideToggle(300);
     $("#optionsButton").slideToggle(300);
     $("#gameBoard").fadeToggle(800).css("display", "grid");
@@ -186,6 +200,6 @@ $(document).ready(function() {
   });
 
   $("#optionsDone").click(function() {
-    $("#startButton").slideToggle();
+    if (validateOptions()) $("#startButton").slideToggle();
   });
 });
