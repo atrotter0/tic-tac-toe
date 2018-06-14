@@ -23,6 +23,7 @@ Player.prototype.makeEasyComputerChoice = function(board) {
 Player.prototype.makeHardComputerChoice = function(board, opponent) {
   console.log("made it to hard choice");
   this.setWinCondition(board, opponent);
+  console.log(this.strategy);
   var choice = Math.floor((Math.random() * (this.strategy.length - 1)) + 0);
   var gameTile = board.coordinates[choice];
   board.removeCoordinate(choice);
@@ -43,40 +44,17 @@ Player.prototype.setWinCondition = function(board, opponent) {
 }
 
 Player.prototype.chooseStrategy = function(board, opponent) {
-  var index = Math.floor((Math.random() * (this.strategies.length - 1)) + 0);
-  this.strategy = this.strategies[index];
+  var index = Math.floor((Math.random() * (board.strategies.length - 1)) + 0);
+  this.strategy = board.strategies[index];
+  board.strategies.splice(index, 1);
 }
 
-Player.protoype.checkOpponentMarks = function(board, opponent) {
+Player.prototype.checkOpponentMarks = function(board, opponent) {
   for(var i = 0; i < opponent.selections.length; i++) {
-    if (this.strategy.includes(selections[i])) {
+    if (this.strategy.includes(opponent.selections[i])) {
       this.chooseStrategy(board, opponent);
     }
   }
-}
-
-
-
-  // loop through strategies, compare to player selections.
-  // for(var i = 0; i < strategies.length; i++) {
-  //   for(var j = 0; j < strategies[i].length; j++) {
-  //     // check for coordinates selected by opponent
-  //     if (opponent.selections.includes(strategies[i][j])) {
-  //       console.log("Matching strategy");
-  //       strategies.splice(strategies[i], 1);
-  //     } else {
-  //       console.log("no matching strategy");
-  //       if (!this.strategy.includes(strategies[i][j])) {
-  //         this.strategy = strategies[i];
-  //         strategies.splice(strategies[i], 1);
-  //         console.log(strategies);
-  //       }
-  //       strategies.splice(strategies[i], 1);
-  //       console.log(this.strategy);
-  //       return;
-  //     }
-  //   }
-  // }
 }
 
 Player.prototype.removeStrategy = function(choice) {
