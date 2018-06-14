@@ -12,22 +12,22 @@ A Tic-Tac-Toe game made with JavaScript, jQuery, and Bootstrap.
 
 1. Program allows player to set their name.
   * Input: "Abel"
-  * Output: Player Name -> Abel
+  * Output: player1.name => "Abel"
 1. Program allows player to choose a difficulty.
   * Input: Easy
-  * Output: Difficulty -> Easy
+  * Output: player1.difficulty => "easy"
 1. Program allows player to choose their mark.
   * Input: X
-  * Output: Player Mark -> X
+  * Output: player1.mark => "x"
 1. Program determines who goes first (coin flip).
-  * Input: board.whoGoesFirst()
-  * Output: Player {name}'s turn!
+  * Input: Computer wins coin flip.
+  * Output: Skynet goes first!
 1. Program allows player to place their mark on a coordinate on the board on their turn.
-  * Input: board.placeMark(turn)
-  * Output: Mark placed at -> board.lastMarkPlaced()
+  * Input: board.placeMark(coordinate)
+  * Output: board.lastMarkPlaced() => "a1"
 1. Program checks for a win based on three-in-a-row win condition.
-  * Input: A1: X, A2: X, A3: X
-  * Output: Player {name} wins!
+  * Input: "a1, a2, a3"
+  * Output: Abe wins!
 
 ## Setup/Contribution Requirements
 
@@ -44,6 +44,9 @@ A Tic-Tac-Toe game made with JavaScript, jQuery, and Bootstrap.
 * jQuery 3.3.1
 
 ## Links
+
+* [Github Repo] (https://github.com/atrotter0/tic-tac-toe)
+* [Github Pages] (https://atrotter0.github.io/tic-tac-toe)
 
 ## License
 
