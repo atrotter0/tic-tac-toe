@@ -151,16 +151,23 @@ function runPlayerTurn() {
 
 function computerChoice() {
   var choice = player2.makeComputerChoice(gameBoard);
+  runClickedAnimation("#" + choice);
   console.log("Computer chooses: " + choice);
   gameBoard.setPlayerTurn(player1, player2);
 }
 
 function runUserChoice(element) {
   var id = $(element).attr("id");
+  runClickedAnimation("#" + id);
   console.log("Player chooses: " + id);
   player1.makePlayerChoice(gameBoard, id);
   gameBoard.setPlayerTurn(player1, player2);
   runPlayerTurn();
+}
+
+function runClickedAnimation(id) {
+  console.log(id);
+  $(id).addClass('selected').delay(5000);
 }
 
 $(document).ready(function() {
@@ -172,6 +179,10 @@ $(document).ready(function() {
   });
 
   $(".grid-item").click(function() {
-    runUserChoice(this);
+    if ($(this).hasClass("selected")) {
+      $("#gameMsgArea").text("HEY! YOU CAN'T CLICK A SQUARE THAT HAS ALREADY BEEN CLICKED!");
+    } else {
+      runUserChoice(this);
+    }
   });
 });

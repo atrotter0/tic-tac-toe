@@ -28,13 +28,29 @@
 .grid-container {
   display: grid;
   grid-template-columns: auto auto auto;
-  background-color: #eee;
 }
 
 .grid-item {
+  margin: 5px;
   border: 1px solid #000;
+  border-radius: 3px;
   height: 250px;
   max-height: 250px;
+  padding: 3px;
+  cursor: pointer;
+  background-color: #eee;
+  transition: 0.5s;
+}
+
+.grid-item:hover {
+  bbackground-color: rgba(238,238,238,0.55);
+  box-shadow: 2px 2px 20px #4e4e4e;
+  transition: 0.5s;
+}
+
+.selected {
+  transform: rotateY(360deg);
+  background-color: lightgreen;
 }
 
 /* responsive styles */
