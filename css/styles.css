@@ -1,5 +1,6 @@
 .jumbotron {
   border-radius: 0.3rem 0.3rem 0rem 0rem;
+  margin-bottom: 0;
 }
 
 .jumbotron h1 {
@@ -49,14 +50,6 @@ input[type="radio"] {
   font-size: 1.2em;
 }
 
-.hidden {
-  visibility: hidden;
-}
-
-.visible {
-  visibility: visible;
-}
-
 .x {
   background-image: url("../img/x.png");
   background-repeat: no-repeat;
@@ -71,9 +64,16 @@ input[type="radio"] {
   background-size: 50%;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}
+
 #gameMsgBox {
   margin-top: -32px;
-  margin-bottom: 10px;
   height: 70px;
 }
 

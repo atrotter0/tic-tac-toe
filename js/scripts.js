@@ -153,7 +153,7 @@ function startGame() {
 }
 
 function runPlayerTurn() {
-  if (gameBoard.turn === player2.name) computerChoice();
+  if (gameBoard.turn === player2.name) setTimeout(function() { computerChoice(); }, 1000);
 }
 
 function computerChoice() {
