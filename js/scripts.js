@@ -169,6 +169,7 @@ function displayTurn() {
 
 $(document).ready(function() {
   $("#startButton").click(function() {
+    $("#jumbo-message").text("Good luck, enjoy the game!");
     $(this).slideToggle(300);
     $("#optionsButton").slideToggle(300);
     $("#gameBoard").fadeToggle(800).css("display", "grid");
@@ -177,7 +178,8 @@ $(document).ready(function() {
 
   $(".grid-item").click(function() {
     if ($(this).hasClass("selected")) {
-      $("#gameMsgArea").text("You can't click a square that has already been clicked...").removeClass("alert-info").addClass("alert-danger").fadeIn(800).delay(4000).fadeOut(800);
+      $("#gameMsgArea").text("You can't click a square that has already been clicked...")
+        .removeClass("alert-info").addClass("alert-danger").fadeIn(800).delay(4000).fadeOut(800);
     } else {
       runUserChoice(this);
     }

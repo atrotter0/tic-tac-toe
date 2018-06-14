@@ -1,3 +1,19 @@
+.jumbotron {
+  border-radius: 0.3rem 0.3rem 0rem 0rem;
+}
+
+.jumbotron h1 {
+  text-shadow: 1px 1px #ada4a4;
+}
+
+button:focus {
+  outline: none;
+}
+
+.alert {
+  border-radius: 0rem 0rem;
+}
+
 #hiddenMsg {
   color: #eee;
   transition: 1s;
@@ -13,6 +29,26 @@
   display: none;
 }
 
+input[type="radio"] {
+  cursor: pointer;
+  transform: scale(1.4);
+  margin: 10px 20px;
+}
+
+.fancy-label {
+  width: 25%;
+  min-width: 150px;
+  transition: 0.5s;
+}
+
+.fancy-label:hover {
+  cursor: pointer;
+  text-shadow: 1px 1px #ada4a4;
+  transition: 0.5s;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
 .hidden {
   visibility: hidden;
 }
@@ -25,14 +61,14 @@
   background-image: url("../img/x.png");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100%;
+  background-size: 50%;
 }
 
 .o {
   background-image: url("../img/o.png");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100%;
+  background-size: 50%;
 }
 
 #gameMsgBox {
@@ -63,7 +99,7 @@
   max-height: 250px;
   padding: 3px;
   cursor: pointer;
-  background-color: #eee;
+  background-color: #fff;
   transition: 0.5s;
 }
 
@@ -74,7 +110,6 @@
 
 .selected {
   transform: rotateY(360deg);
-  bbackground-color: lightgreen;
 }
 
 /* responsive styles */

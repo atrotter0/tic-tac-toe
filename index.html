@@ -15,10 +15,10 @@
       <div class="col-12">
         <div class="jumbotron">
           <h1>Tic-Tac-Toe Game</h1>
-          <p>Set your options below and then start a game of tic-tac-toe versus the computer!</p>
+          <p id="jumbo-message">Set your options below, and then start a game of tic-tac-toe against our proprietary AI!</p>
           <p id="hiddenMsg">This one is much better than Kevin & Elly's!!!!!</p>
-          <button class="btn btn-primary btn-lg" type="button" id="optionsButton" data-toggle="modal" data-target="#optionsModal">Options</button>
-          <button class="btn btn-primary btn-lg" type="button" id="startButton">Start Game</button>
+          <button class="btn btn-default btn-lg" type="button" id="optionsButton" data-toggle="modal" data-target="#optionsModal">Options</button>
+          <button class="btn btn-success btn-lg" type="button" id="startButton">Start Game</button>
         </div>
       </div>
     </div>
@@ -26,7 +26,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Options</h5>
+            <h4 class="modal-title" id="exampleModalLabel">Options</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -38,30 +38,30 @@
                 <input class="form-control" id="name" type="text">
               </div>
               <div class="form-group">
-                <h4>Select your mark:</h4>
+                <h4>Select Your Mark:</h4>
                 <div>
-                  <label for="markX">
+                  <label class="fancy-label" for="markX">
                     <input type="radio" id="markX" name="mark" value="x">
                     X
                   </label>
                 </div>
                 <div>
-                  <label for="markO">
+                  <label class="fancy-label" for="markO">
                     <input type="radio" id="markO" name="mark" value="o">
                     O
                   </label>
                 </div>
               </div>
               <div class="form-group">
-                <h4>Select difficulty:</h4>
+                <h4>Select Difficulty:</h4>
                 <div>
-                  <label for="diffEasy">
+                  <label class="fancy-label" for="diffEasy">
                     <input type="radio" id="diffEasy" name="difficulty" value="easy">
                     Easy
                   </label>
                 </div>
                 <div>
-                  <label for="diffHard">
+                  <label class="fancy-label" for="diffHard">
                     <input type="radio" id="diffHard" name="difficulty" value="hard">
                     Hard
                   </label>
@@ -70,7 +70,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="optionsDone">Done</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="optionsDone">Confirm</button>
           </div>
         </div>
       </div>
@@ -79,33 +79,15 @@
       <div class="alert alert-info" id="gameMsgArea"></div>
     </div>
     <div class="grid-container" id="gameBoard">
-      <div class="grid-item" id="a1">
-        A1
-      </div>
-      <div class="grid-item" id="a2">
-        A2
-      </div>
-      <div class="grid-item" id="a3">
-        A3
-      </div>
-      <div class="grid-item" id="b1">
-        B1
-      </div>
-      <div class="grid-item" id="b2">
-        B2
-      </div>
-      <div class="grid-item" id="b3">
-        B3
-      </div>
-      <div class="grid-item" id="c1">
-        C1
-      </div>
-      <div class="grid-item" id="c2">
-        C2
-      </div>
-      <div class="grid-item" id="c3">
-        C3
-      </div>
+      <div class="grid-item" id="a1"></div>
+      <div class="grid-item" id="a2"></div>
+      <div class="grid-item" id="a3"></div>
+      <div class="grid-item" id="b1"></div>
+      <div class="grid-item" id="b2"></div>
+      <div class="grid-item" id="b3"></div>
+      <div class="grid-item" id="c1"></div>
+      <div class="grid-item" id="c2"></div>
+      <div class="grid-item" id="c3"></div>
     </div>
   </div>
 </body>
