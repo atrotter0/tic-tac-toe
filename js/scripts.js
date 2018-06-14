@@ -26,7 +26,6 @@ Player.prototype.makePlayerChoice = function(board, coordinate) {
 
 function Board() {
   this.coordinates = ["a1", "a2", "a3", "b1", "b2", "b3", "c1", "c2", "c3"];
-  this.whoGoesFirst = "";
   this.lastMarkPlaced = "";
   this.turn = "";
 }
@@ -36,11 +35,9 @@ Board.prototype.determineWhoGoesFirst = function(player1, player2) {
   console.log("Coin Flip: " + coinFlip);
   if (coinFlip === 1) {
     player1.turn = true;
-    this.whoGoesFirst = player1.name;
     this.turn = player1.name;
   } else {
     player2.turn = true;
-    this.whoGoesFirst = player2.name;
     this.turn = player2.name;
   }
 }
@@ -58,7 +55,7 @@ Board.prototype.setPlayerTurn = function(player1, player2) {
 }
 
 Board.prototype.announceTurn = function() {
-  return this.whoGoesFirst + " goes first!";
+  return this.turn + " goes first!";
 }
 
 Board.prototype.removeCoordinate = function(coordinate) {
@@ -76,7 +73,7 @@ Board.prototype.checkForWin = function(player) {
   // vertical three of a kind A1 B1 C1 ... A3 B3 C3
   // diagonal one of a kind A1 B2 C3 / C1 B2 A3
   if (this.checkWinConditions(player)) {
-    console.log(player.name + " you win");
+    console.log(player.name + " wins!");
   }
 }
 
@@ -140,49 +137,52 @@ function startGame() {
   runPlayerTurn();
 }
 
-function displayTurn() {
-  $("#gameMsgArea").text(gameBoard.announceTurn());
-  $("#gameMsgBox").fadeToggle(1200);
-}
-
 function runPlayerTurn() {
   if (gameBoard.turn === player2.name) computerChoice();
 }
 
 function computerChoice() {
   var choice = player2.makeComputerChoice(gameBoard);
-  runClickedAnimation("#" + choice);
+  runTileAnimation("#" + choice);
   console.log("Computer chooses: " + choice);
   gameBoard.setPlayerTurn(player1, player2);
 }
 
 function runUserChoice(element) {
   var id = $(element).attr("id");
-  runClickedAnimation("#" + id);
+  runTileAnimation("#" + id);
   console.log("Player chooses: " + id);
   player1.makePlayerChoice(gameBoard, id);
   gameBoard.setPlayerTurn(player1, player2);
   runPlayerTurn();
 }
 
-function runClickedAnimation(id) {
-  console.log(id);
-  $(id).addClass('selected').delay(5000);
+function runTileAnimation(id) {
+  $(id).addClass('selected');
+}
+
+function displayTurn() {
+  $("#gameMsgArea").text(gameBoard.announceTurn()).fadeIn(800).delay(4000).fadeOut(800);;
+  $("#gameMsgBox").toggleClass("visible");
 }
 
 $(document).ready(function() {
   $("#startButton").click(function() {
-    $(this).toggle();
-    $("#optionsButton").toggle();
+    $(this).slideToggle(300);
+    $("#optionsButton").slideToggle(300);
     $("#gameBoard").fadeToggle(800).css("display", "grid");
     runGame();
   });
 
   $(".grid-item").click(function() {
     if ($(this).hasClass("selected")) {
-      $("#gameMsgArea").text("HEY! YOU CAN'T CLICK A SQUARE THAT HAS ALREADY BEEN CLICKED!");
+      $("#gameMsgArea").text("You can't click a square that has already been clicked...").removeClass("alert-info").addClass("alert-danger").fadeIn(800).delay(4000).fadeOut(800);
     } else {
       runUserChoice(this);
     }
+  });
+
+  $("#optionsDone").click(function() {
+    $("#startButton").slideToggle();
   });
 });
