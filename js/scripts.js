@@ -3,6 +3,7 @@ var player2 = {};
 var gameBoard = {};
 
 function Player(name) {
+  this.id = "";
   this.name = name;
   this.difficulty = "";
   this.mark = "";
@@ -132,11 +133,13 @@ function difficultySet() {
 
 function runGame() {
   player1 = new Player($("#name").val());
+  player1.id = "player1";
   player2 = new Player("Skynet");
-  gameBoard = new Board();
+  player2.id = "player2";
   player1.mark = $("input[name=mark]:checked").val();
   player2.mark = $('input[type="radio"]:not(:checked)').val();
   player1.difficulty = $("input[name=difficulty]:checked").val();
+  gameBoard = new Board();
   startGame();
 }
 
@@ -152,7 +155,7 @@ function runPlayerTurn() {
 
 function computerChoice() {
   var choice = player2.makeComputerChoice(gameBoard);
-  setGameTile("#" + choice, player2.mark);
+  setGameTile("#" + choice, player2);
   gameBoard.setPlayerTurn(player1, player2);
   console.log("Computer chooses: " + choice);
   runWinCheck(player2);
@@ -160,15 +163,15 @@ function computerChoice() {
 
 function runUserChoice(element) {
   var id = $(element).attr("id");
-  setGameTile("#" + id, player1.mark);
+  setGameTile("#" + id, player1);
   player1.makePlayerChoice(gameBoard, id);
   gameBoard.setPlayerTurn(player1, player2);
   console.log("Player chooses: " + id);
   runWinCheck(player1);
 }
 
-function setGameTile(id, playerMark) {
-  $(id).addClass('selected').addClass(playerMark);
+function setGameTile(id, player) {
+  $(id).addClass('selected').addClass(player.mark).addClass(player.id + "-border");
 }
 
 function runWinCheck(player) {
