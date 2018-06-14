@@ -186,6 +186,7 @@ function runWin(player) {
   $(".grid-item").off("click")
   $("#gameMsgArea").text(player.name + " wins!").removeClass("alert-info").addClass("alert-success").fadeIn(800);
   additionalMsg(player);
+  $("#restartButton").slideToggle();
   console.log(player.name + " wins!");
 }
 
@@ -202,6 +203,10 @@ function additionalMsg(player) {
 function displayTurn() {
   $("#gameMsgArea").text(gameBoard.announceTurn()).fadeIn(800).delay(4000).fadeOut(800);
   $("#gameMsgBox").toggleClass("visible");
+}
+
+function resetGame() {
+  location.reload();
 }
 
 $(document).ready(function() {
@@ -224,5 +229,9 @@ $(document).ready(function() {
 
   $("#optionsDone").click(function() {
     if (validateOptions()) $("#startButton").slideToggle();
+  });
+
+  $("#restartButton").click(function() {
+    resetGame();
   });
 });

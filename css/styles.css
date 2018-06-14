@@ -7,10 +7,6 @@
   text-shadow: 1px 1px #ada4a4;
 }
 
-button:focus {
-  outline: none;
-}
-
 .alert {
   border-radius: 0rem 0rem;
 }
@@ -26,7 +22,7 @@ button:focus {
   cursor: pointer;
 }
 
-#startButton {
+#startButton, #restartButton {
   display: none;
 }
 
