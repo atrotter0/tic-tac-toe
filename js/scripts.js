@@ -24,10 +24,12 @@ Player.prototype.makeHardComputerChoice = function(board, opponent) {
   console.log("made it to hard choice");
   this.setWinCondition(board, opponent);
   console.log(this.strategy);
-  var choice = Math.floor((Math.random() * (this.strategy.length - 1)) + 0);
-  var gameTile = board.coordinates[choice];
-  board.removeCoordinate(choice);
-  this.removeStrategy(choice);
+  var index = Math.floor((Math.random() * (this.strategy.length - 1)) + 0);
+  var choice = this.strategy[index];
+  var gameTile = choice;
+  board.removeCoordinate(board.coordinates.indexOf(choice));
+  this.removeStrategy(index);
+  console.log("coordinates: " + board.coordinates);
   this.selections.push(gameTile);
   return gameTile;
 }
@@ -35,6 +37,7 @@ Player.prototype.makeHardComputerChoice = function(board, opponent) {
 Player.prototype.makePlayerChoice = function(board, coordinate) {
   var index = board.coordinates.indexOf(coordinate);
   board.removeCoordinate(index);
+  console.log("coordinates: " + board.coordinates);
   this.selections.push(coordinate);
 }
 
@@ -43,16 +46,26 @@ Player.prototype.setWinCondition = function(board, opponent) {
   this.checkOpponentMarks(board, opponent);
 }
 
-Player.prototype.chooseStrategy = function(board, opponent) {
+Player.prototype.chooseFirstStrategy = function(board) {
   var index = Math.floor((Math.random() * (board.strategies.length - 1)) + 0);
   this.strategy = board.strategies[index];
-  board.strategies.splice(index, 1);
+}
+
+Player.prototype.chooseStrategy = function(board, opponent) {
+  var index = Math.floor((Math.random() * (board.coordinates.length - 1)) + 0);
+  if (board.strategies.length === undefined || board.strategies.length == 0) {
+    this.strategy.push(board.coordinates[index]);
+  } else if (/* check a way to change strat */) {
+    this.strategy = board.strategies[index];
+    board.strategies.splice(index, 1);
+  }
 }
 
 Player.prototype.checkOpponentMarks = function(board, opponent) {
   for(var i = 0; i < opponent.selections.length; i++) {
     if (this.strategy.includes(opponent.selections[i])) {
       this.chooseStrategy(board, opponent);
+      // do something here
     }
   }
 }
@@ -176,6 +189,7 @@ function runGame() {
   player1.difficulty = $("input[name=difficulty]:checked").val();
   gameBoard = new Board();
   gameBoard.strategies = gameBoard.possibleWinConditions();
+  player2.chooseFirstStrategy(gameBoard);
   startGame();
 }
 
