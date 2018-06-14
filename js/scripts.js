@@ -105,7 +105,6 @@ Board.prototype.checkWinConditions = function(player) {
       }
     }
   }
-  console.log("Win counter: " + winCounter);
   return this.checkWinCounter(winCounter);
 }
 
@@ -133,7 +132,7 @@ function difficultySet() {
 
 function runGame() {
   player1 = new Player($("#name").val());
-  player2 = new Player("Computer");
+  player2 = new Player("Skynet");
   gameBoard = new Board();
   player1.mark = $("input[name=mark]:checked").val();
   player2.mark = $('input[type="radio"]:not(:checked)').val();
@@ -181,11 +180,24 @@ function runWinCheck(player) {
 }
 
 function runWin(player) {
+  $(".grid-item").off("click")
+  $("#gameMsgArea").text(player.name + " wins!").removeClass("alert-info").addClass("alert-success").fadeIn(800);
+  additionalMsg(player);
   console.log(player.name + " wins!");
 }
 
+function additionalMsg(player) {
+  var msg = "";
+  if (player.name === "Skynet") {
+    msg = "You have been terminated. Mwahahahahaha!";
+  } else {
+    msg = "Skynet will learn from your expertise and grow stronger...";
+  }
+  $("#jumbo-message").text(msg);
+}
+
 function displayTurn() {
-  $("#gameMsgArea").text(gameBoard.announceTurn()).fadeIn(800).delay(4000).fadeOut(800);;
+  $("#gameMsgArea").text(gameBoard.announceTurn()).fadeIn(800).delay(4000).fadeOut(800);
   $("#gameMsgBox").toggleClass("visible");
 }
 
