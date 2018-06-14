@@ -9,6 +9,7 @@ function Player(name) {
   this.mark = "";
   this.turn = false;
   this.selections = [];
+  this.strategy = [];
 }
 
 Player.prototype.makeEasyComputerChoice = function(board) {
@@ -19,11 +20,13 @@ Player.prototype.makeEasyComputerChoice = function(board) {
   return gameTile;
 }
 
-Player.prototype.makeHardComputerChoice = function(board) {
+Player.prototype.makeHardComputerChoice = function(board, opponent) {
   console.log("made it to hard choice");
-  var choice = ""; //build function to figure out hard choice
+  this.setWinCondition(board, opponent);
+  var choice = Math.floor((Math.random() * (this.strategy.length - 1)) + 0);
   var gameTile = board.coordinates[choice];
   board.removeCoordinate(choice);
+  this.removeStrategy(choice);
   this.selections.push(gameTile);
   return gameTile;
 }
@@ -34,9 +37,56 @@ Player.prototype.makePlayerChoice = function(board, coordinate) {
   this.selections.push(coordinate);
 }
 
+Player.prototype.setWinCondition = function(board, opponent) {
+  this.chooseStrategy(board, opponent);
+  this.checkOpponentMarks(board, opponent);
+}
+
+Player.prototype.chooseStrategy = function(board, opponent) {
+  var index = Math.floor((Math.random() * (this.strategies.length - 1)) + 0);
+  this.strategy = this.strategies[index];
+}
+
+Player.protoype.checkOpponentMarks = function(board, opponent) {
+  for(var i = 0; i < opponent.selections.length; i++) {
+    if (this.strategy.includes(selections[i])) {
+      this.chooseStrategy(board, opponent);
+    }
+  }
+}
+
+
+
+  // loop through strategies, compare to player selections.
+  // for(var i = 0; i < strategies.length; i++) {
+  //   for(var j = 0; j < strategies[i].length; j++) {
+  //     // check for coordinates selected by opponent
+  //     if (opponent.selections.includes(strategies[i][j])) {
+  //       console.log("Matching strategy");
+  //       strategies.splice(strategies[i], 1);
+  //     } else {
+  //       console.log("no matching strategy");
+  //       if (!this.strategy.includes(strategies[i][j])) {
+  //         this.strategy = strategies[i];
+  //         strategies.splice(strategies[i], 1);
+  //         console.log(strategies);
+  //       }
+  //       strategies.splice(strategies[i], 1);
+  //       console.log(this.strategy);
+  //       return;
+  //     }
+  //   }
+  // }
+}
+
+Player.prototype.removeStrategy = function(choice) {
+  this.strategy.splice(choice, 1);
+}
+
 function Board() {
   this.coordinates = ["a1", "a2", "a3", "b1", "b2", "b3", "c1", "c2", "c3"];
   this.turn = "";
+  this.strategies = [];
 }
 
 Board.prototype.determineFirstTurn = function(player1, player2) {
@@ -147,6 +197,7 @@ function runGame() {
   player2.mark = $('input[type="radio"]:not(:checked)').val();
   player1.difficulty = $("input[name=difficulty]:checked").val();
   gameBoard = new Board();
+  gameBoard.strategies = gameBoard.possibleWinConditions();
   startGame();
 }
 
@@ -157,6 +208,7 @@ function startGame() {
 }
 
 function runPlayerTurn() {
+  console.log("running player turn");
   if (gameBoard.turn === player2.name && player1.difficulty === "easy") {
     setTimeout(function() { computerEasyChoice(); }, 1000);
   } else if (gameBoard.turn === player2.name && player1.difficulty === "hard") {
@@ -173,7 +225,11 @@ function computerEasyChoice() {
 }
 
 function computerHardChoice() {
-  var choice = player2.makeHardComputerChoice(gameBoard);
+  var choice = player2.makeHardComputerChoice(gameBoard, player1);
+  setGameTile("#" + choice, player2);
+  gameBoard.setPlayerTurn(player1, player2);
+  console.log("Computer chooses: " + choice);
+  runWinCheck(player2);
 }
 
 function runUserChoice(element) {
