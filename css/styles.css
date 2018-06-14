@@ -28,7 +28,7 @@
 
 input[type="radio"] {
   cursor: pointer;
-  transform: scale(1.4);
+  ttransform: scale(1.4);
   margin: 10px 20px;
 }
 

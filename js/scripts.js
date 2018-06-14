@@ -11,7 +11,7 @@ function Player(name) {
   this.selections = [];
 }
 
-Player.prototype.makeComputerChoice = function(board) {
+Player.prototype.makeEasyComputerChoice = function(board) {
   var randomChoice = Math.floor((Math.random() * (board.coordinates.length - 1)) + 0);
   var gameTile = board.coordinates[randomChoice];
   board.removeCoordinate(randomChoice);
@@ -19,16 +19,23 @@ Player.prototype.makeComputerChoice = function(board) {
   return gameTile;
 }
 
+Player.prototype.makeHardComputerChoice = function(board) {
+  console.log("made it to hard choice");
+  var choice = ""; //build function to figure out hard choice
+  var gameTile = board.coordinates[choice];
+  board.removeCoordinate(choice);
+  this.selections.push(gameTile);
+  return gameTile;
+}
+
 Player.prototype.makePlayerChoice = function(board, coordinate) {
   var index = board.coordinates.indexOf(coordinate);
-  var gameTile = coordinate;
   board.removeCoordinate(index);
   this.selections.push(coordinate);
 }
 
 function Board() {
   this.coordinates = ["a1", "a2", "a3", "b1", "b2", "b3", "c1", "c2", "c3"];
-  this.lastMarkPlaced = "";
   this.turn = "";
 }
 
@@ -64,12 +71,6 @@ Board.prototype.removeCoordinate = function(coordinate) {
   this.coordinates.splice(coordinate, 1);
 }
 
-Board.prototype.placeMark = function(player, coordinate) {
-  player.selections.push(coordinate);
-  this.lastMarkPlaced = coordinate;
-  this.checkForWin();
-}
-
 Board.prototype.checkForWin = function(player) {
   // horizontal three of a kind A1 A2 A3 ... C1 C2 C3
   // vertical three of a kind A1 B1 C1 ... A3 B3 C3
@@ -79,8 +80,7 @@ Board.prototype.checkForWin = function(player) {
   }
 }
 
-Board.prototype.checkWinConditions = function(player) {
-  var winCounter = 0;
+Board.prototype.possibleWinConditions = function() {
   var horiz1 = ["a1", "a2", "a3"];
   var horiz2 = ["b1", "b2", "b3"];
   var horiz3 = ["c1", "c2", "c3"];
@@ -90,15 +90,22 @@ Board.prototype.checkWinConditions = function(player) {
   var diag1 = ["a1", "b2", "c3"];
   var diag2 = ["c1", "b2", "a3"];
   var winConditions = [horiz1, horiz2, horiz3, vert1, vert2, vert3, diag1, diag2];
+  return winConditions;
+}
 
+Board.prototype.checkWinConditions = function(player) {
+  var winCounter = 0;
+  var winConditions = this.possibleWinConditions();
+  // loop through master win conditions array
   for(var i = 0; i < winConditions.length; i++) {
     if (winCounter >= 3) {
       return true;
     } else {
       winCounter = 0;
     }
-
+    // loop through individual win condition
     for(j = 0; j < winConditions[j].length; j++) {
+      // compare to player selections array
       for(k = 0; k < player.selections.length; k++) {
         if (winConditions[i][j].includes(player.selections[k])) {
           winCounter++;
@@ -150,15 +157,23 @@ function startGame() {
 }
 
 function runPlayerTurn() {
-  if (gameBoard.turn === player2.name) setTimeout(function() { computerChoice(); }, 1000);
+  if (gameBoard.turn === player2.name && player1.difficulty === "easy") {
+    setTimeout(function() { computerEasyChoice(); }, 1000);
+  } else if (gameBoard.turn === player2.name && player1.difficulty === "hard") {
+    setTimeout(function() { computerHardChoice(); }, 1000);
+  }
 }
 
-function computerChoice() {
-  var choice = player2.makeComputerChoice(gameBoard);
+function computerEasyChoice() {
+  var choice = player2.makeEasyComputerChoice(gameBoard);
   setGameTile("#" + choice, player2);
   gameBoard.setPlayerTurn(player1, player2);
   console.log("Computer chooses: " + choice);
   runWinCheck(player2);
+}
+
+function computerHardChoice() {
+  var choice = player2.makeHardComputerChoice(gameBoard);
 }
 
 function runUserChoice(element) {
