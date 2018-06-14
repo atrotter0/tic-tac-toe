@@ -127,6 +127,7 @@ function runGame() {
   player2 = new Player("Computer");
   gameBoard = new Board();
   player1.mark = $("input[name=mark]:checked").val();
+  player2.mark = $('input[type="radio"]:not(:checked)').val();
   player1.difficulty = $("input[name=difficulty]:checked").val();
   startGame();
 }
@@ -143,22 +144,22 @@ function runPlayerTurn() {
 
 function computerChoice() {
   var choice = player2.makeComputerChoice(gameBoard);
-  runTileAnimation("#" + choice);
+  runTileAnimation("#" + choice, player2.mark);
   console.log("Computer chooses: " + choice);
   gameBoard.setPlayerTurn(player1, player2);
 }
 
 function runUserChoice(element) {
   var id = $(element).attr("id");
-  runTileAnimation("#" + id);
+  runTileAnimation("#" + id, player1.mark);
   console.log("Player chooses: " + id);
   player1.makePlayerChoice(gameBoard, id);
   gameBoard.setPlayerTurn(player1, player2);
   runPlayerTurn();
 }
 
-function runTileAnimation(id) {
-  $(id).addClass('selected');
+function runTileAnimation(id, playerMark) {
+  $(id).addClass('selected').addClass(playerMark);
 }
 
 function displayTurn() {

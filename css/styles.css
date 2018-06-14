@@ -21,6 +21,20 @@
   visibility: visible;
 }
 
+.x {
+  background-image: url("../img/x.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+}
+
+.o {
+  background-image: url("../img/o.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+}
+
 #gameMsgBox {
   margin-top: -32px;
   margin-bottom: 10px;
@@ -60,7 +74,7 @@
 
 .selected {
   transform: rotateY(360deg);
-  background-color: lightgreen;
+  bbackground-color: lightgreen;
 }
 
 /* responsive styles */
