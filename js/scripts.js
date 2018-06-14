@@ -16,22 +16,22 @@ Player.prototype.makeEasyComputerChoice = function(board) {
   var randomChoice = Math.floor((Math.random() * (board.coordinates.length - 1)) + 0);
   var gameTile = board.coordinates[randomChoice];
   board.removeCoordinate(randomChoice);
+  board.removeStrategy
   this.selections.push(gameTile);
   return gameTile;
 }
 
 Player.prototype.makeHardComputerChoice = function(board, opponent) {
   console.log("made it to hard choice");
-  this.checkOpponentMarks(board, opponent);
+  this.chooseStrategy(board, opponent);
   console.log(this.strategy);
   var index = Math.floor((Math.random() * (this.strategy.length - 1)) + 0);
   var choice = this.strategy[index];
-  var gameTile = choice;
   board.removeCoordinate(board.coordinates.indexOf(choice));
   this.removeStrategy(index);
   console.log("coordinates: " + board.coordinates);
-  this.selections.push(gameTile);
-  return gameTile;
+  this.selections.push(choice);
+  return choice;
 }
 
 Player.prototype.makePlayerChoice = function(board, coordinate, player2) {
@@ -47,32 +47,8 @@ Player.prototype.chooseFirstStrategy = function(board) {
   this.strategy = board.strategies[index];
 }
 
-Player.prototype.checkOpponentMarks = function(board, opponent) {
-  if (!this.validHardChoice(board)) {
-    console.log("Match, need to set new strat");
-    this.chooseStrategy(board, opponent);
-  }
-}
-
-Player.prototype.validHardChoice = function(board) {
-  for(var i = 0; i < board.coordinates.length; i++) {
-    if (this.strategy.includes(board.coordinates[i])) {
-      return true;
-    }
-  }
-}
-
 Player.prototype.chooseStrategy = function(board, opponent) {
-  console.log("choosing strat...");
-  var index = Math.floor((Math.random() * (board.coordinates.length - 1)) + 0);
-  if (board.strategies.length === undefined || board.strategies.length == 0) {
-    console.log("fell into if");
-    this.strategy.push(board.coordinates[index]);
-  } else if (this.strategy.length === 0) {
-    console.log("fell into else");
-    this.strategy = board.strategies[index];
-    board.strategies.splice(index, 1);
-  }
+  // loop through strategies, remove
 }
 
 Player.prototype.removeStrategy = function(choice) {
