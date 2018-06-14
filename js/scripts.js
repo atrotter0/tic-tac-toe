@@ -14,14 +14,15 @@ Player.prototype.makeComputerChoice = function(board) {
   var randomChoice = Math.floor((Math.random() * (board.coordinates.length - 1)) + 0);
   var gameTile = board.coordinates[randomChoice];
   board.removeCoordinate(randomChoice);
-  this.selections.push(board.coordinates[randomChoice]);
+  this.selections.push(gameTile);
   return gameTile;
 }
 
 Player.prototype.makePlayerChoice = function(board, coordinate) {
   var index = board.coordinates.indexOf(coordinate);
+  var gameTile = coordinate;
   board.removeCoordinate(index);
-  this.selections.push(board.coordinates[coordinate]);
+  this.selections.push(coordinate);
 }
 
 function Board() {
@@ -78,8 +79,7 @@ Board.prototype.checkForWin = function(player) {
 }
 
 Board.prototype.checkWinConditions = function(player) {
-  var result = false;
-  var counter = 0;
+  var winCounter = 0;
   var horiz1 = ["a1", "a2", "a3"];
   var horiz2 = ["b1", "b2", "b3"];
   var horiz3 = ["c1", "c2", "c3"];
@@ -91,32 +91,27 @@ Board.prototype.checkWinConditions = function(player) {
   var winConditions = [horiz1, horiz2, horiz3, vert1, vert2, vert3, diag1, diag2];
 
   for(var i = 0; i < winConditions.length; i++) {
-    if (counter >= 3) {
+    if (winCounter >= 3) {
       return true;
     } else {
-      counter = 0;
+      winCounter = 0;
     }
+
     for(j = 0; j < winConditions[j].length; j++) {
-      console.log(winConditions[i][j]);
       for(k = 0; k < player.selections.length; k++) {
         if (winConditions[i][j].includes(player.selections[k])) {
-          counter++;
+          winCounter++;
         }
       }
     }
   }
+  console.log("Win counter: " + winCounter);
+  return this.checkWinCounter(winCounter);
 }
 
-Board.prototype.checkArrayValues = function(array, selections) {
-  var counter = 0;
-  for(var i = 0; i < array.length; i++) {
-    if (array.includes(selections[i])) counter++;
-  }
-  return this.checkCounter(counter);
-}
-
-Board.prototype.checkCounter = function(counter) {
-  if (counter === 3) return true;
+Board.prototype.checkWinCounter = function(winCounter) {
+  const WIN_NUMBER = 3;
+  if (winCounter === WIN_NUMBER) return true;
 }
 
 function validateOptions() {
@@ -161,6 +156,7 @@ function computerChoice() {
   setGameTile("#" + choice, player2.mark);
   gameBoard.setPlayerTurn(player1, player2);
   console.log("Computer chooses: " + choice);
+  runWinCheck(player2);
 }
 
 function runUserChoice(element) {
@@ -169,11 +165,23 @@ function runUserChoice(element) {
   player1.makePlayerChoice(gameBoard, id);
   gameBoard.setPlayerTurn(player1, player2);
   console.log("Player chooses: " + id);
-  runPlayerTurn();
+  runWinCheck(player1);
 }
 
 function setGameTile(id, playerMark) {
   $(id).addClass('selected').addClass(playerMark);
+}
+
+function runWinCheck(player) {
+  if (gameBoard.checkWinConditions(player)) {
+    runWin(player);
+  } else {
+    runPlayerTurn();
+  }
+}
+
+function runWin(player) {
+  console.log(player.name + " wins!");
 }
 
 function displayTurn() {
