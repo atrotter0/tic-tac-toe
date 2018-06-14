@@ -183,6 +183,7 @@ function runWinCheck(player) {
 }
 
 function runWin(player) {
+  $('html,body').animate({ scrollTop: 0 }, 'slow');
   $(".grid-item").off("click")
   $("#gameMsgArea").text(player.name + " wins!").removeClass("alert-info").addClass("alert-success").fadeIn(800);
   additionalMsg(player);
