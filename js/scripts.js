@@ -22,7 +22,7 @@ Player.prototype.makeEasyComputerChoice = function(board) {
 
 Player.prototype.makeHardComputerChoice = function(board, opponent) {
   console.log("made it to hard choice");
-  this.setWinCondition(board, opponent);
+  this.checkOpponentMarks(board, opponent);
   console.log(this.strategy);
   var index = Math.floor((Math.random() * (this.strategy.length - 1)) + 0);
   var choice = this.strategy[index];
@@ -34,16 +34,12 @@ Player.prototype.makeHardComputerChoice = function(board, opponent) {
   return gameTile;
 }
 
-Player.prototype.makePlayerChoice = function(board, coordinate) {
+Player.prototype.makePlayerChoice = function(board, coordinate, player2) {
   var index = board.coordinates.indexOf(coordinate);
   board.removeCoordinate(index);
   console.log("coordinates: " + board.coordinates);
+  player2.removeStrategy(player2.strategy.indexOf(coordinate));
   this.selections.push(coordinate);
-}
-
-Player.prototype.setWinCondition = function(board, opponent) {
-  this.chooseStrategy(board, opponent);
-  this.checkOpponentMarks(board, opponent);
 }
 
 Player.prototype.chooseFirstStrategy = function(board) {
@@ -51,22 +47,31 @@ Player.prototype.chooseFirstStrategy = function(board) {
   this.strategy = board.strategies[index];
 }
 
-Player.prototype.chooseStrategy = function(board, opponent) {
-  var index = Math.floor((Math.random() * (board.coordinates.length - 1)) + 0);
-  if (board.strategies.length === undefined || board.strategies.length == 0) {
-    this.strategy.push(board.coordinates[index]);
-  } else if (/* check a way to change strat */) {
-    this.strategy = board.strategies[index];
-    board.strategies.splice(index, 1);
+Player.prototype.checkOpponentMarks = function(board, opponent) {
+  if (!this.validHardChoice(board)) {
+    console.log("Match, need to set new strat");
+    this.chooseStrategy(board, opponent);
   }
 }
 
-Player.prototype.checkOpponentMarks = function(board, opponent) {
-  for(var i = 0; i < opponent.selections.length; i++) {
-    if (this.strategy.includes(opponent.selections[i])) {
-      this.chooseStrategy(board, opponent);
-      // do something here
+Player.prototype.validHardChoice = function(board) {
+  for(var i = 0; i < board.coordinates.length; i++) {
+    if (this.strategy.includes(board.coordinates[i])) {
+      return true;
     }
+  }
+}
+
+Player.prototype.chooseStrategy = function(board, opponent) {
+  console.log("choosing strat...");
+  var index = Math.floor((Math.random() * (board.coordinates.length - 1)) + 0);
+  if (board.strategies.length === undefined || board.strategies.length == 0) {
+    console.log("fell into if");
+    this.strategy.push(board.coordinates[index]);
+  } else if (this.strategy.length === 0) {
+    console.log("fell into else");
+    this.strategy = board.strategies[index];
+    board.strategies.splice(index, 1);
   }
 }
 
@@ -200,7 +205,6 @@ function startGame() {
 }
 
 function runPlayerTurn() {
-  console.log("running player turn");
   if (gameBoard.turn === player2.name && player1.difficulty === "easy") {
     setTimeout(function() { computerEasyChoice(); }, 1000);
   } else if (gameBoard.turn === player2.name && player1.difficulty === "hard") {
@@ -227,7 +231,7 @@ function computerHardChoice() {
 function runUserChoice(element) {
   var id = $(element).attr("id");
   setGameTile("#" + id, player1);
-  player1.makePlayerChoice(gameBoard, id);
+  player1.makePlayerChoice(gameBoard, id, player2);
   gameBoard.setPlayerTurn(player1, player2);
   console.log("Player chooses: " + id);
   runWinCheck(player1);
