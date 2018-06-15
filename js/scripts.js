@@ -33,25 +33,26 @@ Player.prototype.makeHardComputerChoice = function(board, opponent) {
   this.chooseFirstStrategy(board, opponent);
   console.log("strategy: " + this.strategy);
   var index = Math.floor((Math.random() * (this.strategy.length - 1)) + 0);
-  var choice = this.strategy[index];
+  var choice = this.strategy[index]; // <-- this is causing problems
   board.removeCoordinate(board.coordinates.indexOf(choice));
-  //this.removeStrategy(index);
+  this.removeStrategy(index);
   console.log("coordinates: " + board.coordinates);
   this.selections.push(choice);
   return choice;
 }
 
 Player.prototype.chooseFirstStrategy = function(board, opponent) {
+  this.strategy = [];
   //try to grab middle
   if (!opponent.selections.includes("b2") && !this.selections.includes("b2")) {
     this.selectCenter();
+  } else if (!board.noCorners()) {
+    this.selectCorner(board);
   } else if (board.noCorners()) {
     var randomChoice = Math.floor((Math.random() * (board.coordinates.length - 1)) + 0);
-    console.log("random Choice");
     this.strategy = board.coordinates[randomChoice];
   } else {
-    //go for corner
-    this.selectCorner(board);
+    console.log("fell into else");
   }
 }
 
@@ -60,7 +61,6 @@ Player.prototype.selectCenter = function() {
 }
 
 Player.prototype.selectCorner = function(board) {
-  this.strategy = [];
   var corners = board.corners();
   for(var i = 0; i < corners.length; i++) {
     if (board.coordinates.includes(corners[i])) {
