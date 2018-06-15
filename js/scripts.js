@@ -12,43 +12,65 @@ function Player(name) {
   this.strategy = [];
 }
 
+Player.prototype.makePlayerChoice = function(board, coordinate, player2) {
+  var index = board.coordinates.indexOf(coordinate);
+  board.removeCoordinate(index);
+  console.log("current coordinates: " + board.coordinates);
+  player2.removeStrategy(player2.strategy.indexOf(coordinate));
+  this.selections.push(coordinate);
+}
+
 Player.prototype.makeEasyComputerChoice = function(board) {
   var randomChoice = Math.floor((Math.random() * (board.coordinates.length - 1)) + 0);
   var gameTile = board.coordinates[randomChoice];
   board.removeCoordinate(randomChoice);
-  board.removeStrategy
+  console.log("current coordinates: " + board.coordinates);
   this.selections.push(gameTile);
   return gameTile;
 }
 
 Player.prototype.makeHardComputerChoice = function(board, opponent) {
-  console.log("made it to hard choice");
-  this.chooseStrategy(board, opponent);
-  console.log(this.strategy);
+  this.chooseFirstStrategy(board, opponent);
+  console.log("strategy: " + this.strategy);
   var index = Math.floor((Math.random() * (this.strategy.length - 1)) + 0);
   var choice = this.strategy[index];
   board.removeCoordinate(board.coordinates.indexOf(choice));
-  this.removeStrategy(index);
+  //this.removeStrategy(index);
   console.log("coordinates: " + board.coordinates);
   this.selections.push(choice);
   return choice;
 }
 
-Player.prototype.makePlayerChoice = function(board, coordinate, player2) {
-  var index = board.coordinates.indexOf(coordinate);
-  board.removeCoordinate(index);
-  console.log("coordinates: " + board.coordinates);
-  player2.removeStrategy(player2.strategy.indexOf(coordinate));
-  this.selections.push(coordinate);
+Player.prototype.chooseFirstStrategy = function(board, opponent) {
+  //try to grab middle
+  if (!opponent.selections.includes("b2") && !this.selections.includes("b2")) {
+    this.selectCenter();
+  } else if (board.noCorners()) {
+    var randomChoice = Math.floor((Math.random() * (board.coordinates.length - 1)) + 0);
+    console.log("random Choice");
+    this.strategy = board.coordinates[randomChoice];
+  } else {
+    //go for corner
+    this.selectCorner(board);
+  }
 }
 
-Player.prototype.chooseFirstStrategy = function(board) {
-  var index = Math.floor((Math.random() * (board.strategies.length - 1)) + 0);
-  this.strategy = board.strategies[index];
+Player.prototype.selectCenter = function() {
+  this.strategy.push("b2");
+}
+
+Player.prototype.selectCorner = function(board) {
+  this.strategy = [];
+  var corners = board.corners();
+  for(var i = 0; i < corners.length; i++) {
+    if (board.coordinates.includes(corners[i])) {
+      this.strategy.push(corners[i]);
+    }
+  }
 }
 
 Player.prototype.chooseStrategy = function(board, opponent) {
-  // loop through strategies, remove
+  // loop through perimeter. if player has more than 2 positions in perimeter, block
 }
 
 Player.prototype.removeStrategy = function(choice) {
@@ -59,6 +81,24 @@ function Board() {
   this.coordinates = ["a1", "a2", "a3", "b1", "b2", "b3", "c1", "c2", "c3"];
   this.turn = "";
   this.strategies = [];
+}
+
+Board.prototype.corners = function() {
+  return ["a1", "a3", "c1", "c3"];
+}
+
+Board.prototype.noCorners = function() {
+  var corners = this.corners();
+  for(var i = 0; i < corners.length; i++) {
+    if (this.coordinates.includes(corners[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+Board.prototype.perimeterCoords = function() {
+  return ["a1", "a2", "a3", "b1", "b3", "c1", "c2", "c3"];
 }
 
 Board.prototype.determineFirstTurn = function(player1, player2) {
@@ -170,7 +210,7 @@ function runGame() {
   player1.difficulty = $("input[name=difficulty]:checked").val();
   gameBoard = new Board();
   gameBoard.strategies = gameBoard.possibleWinConditions();
-  player2.chooseFirstStrategy(gameBoard);
+  player2.chooseFirstStrategy(gameBoard, player1);
   startGame();
 }
 
