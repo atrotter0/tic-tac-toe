@@ -36,6 +36,10 @@ A Tic-Tac-Toe game made with JavaScript, jQuery, and Bootstrap.
 1. Commit and push your changes
 1. Create a PR
 
+## Known Issues
+
+* Hard Mode is currently non-functional.
+
 ## Technologies Used
 
 * HTML/CSS
